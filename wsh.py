@@ -189,16 +189,16 @@ class Detector(object):
         result["alarm"] = "medium"   #normal, low, medium, high
 
         if self.__show_line:
-            count  = 1
+            count  = 0
             lines = content.split("\n")
 
             for line in lines:
                 lmatches = Regex.findall(line)
+                count += 1
                 if not lmatches:
                     continue
                 result["suspicious"].append({"line": count, "func": lmatches})
-                count += 1
-
+                
         max_flag = 1
         for reg, shell in self.__finger_print:
             m = reg.findall(content)
