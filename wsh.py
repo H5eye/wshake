@@ -111,7 +111,9 @@ class Detector(object):
         paths = []
         if self.__scan_path and osp.isdir(self.__scan_path):
             for suffix in self.__scan_suffixes:
-                globs = glob.glob("*.%s"%suffix)
+                print suffix
+                print "%s/*.%s"%(self.__scan_path, suffix)
+                globs = glob.glob("%s/*.%s"%(self.__scan_path, suffix))
                 globs and paths.extend(globs)
         return paths
 
@@ -160,7 +162,6 @@ class Detector(object):
             "last_accessed": "",
             "owner": "",
             "perm":"",
-
             "alarm": "",
             "fingerprint": [{
                 "name": "conf",
