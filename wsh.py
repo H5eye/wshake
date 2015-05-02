@@ -236,7 +236,7 @@ def opt():
     parser = optparse.OptionParser()
     parser.add_option( '--extension', '-e', type="string",
         dest="extension",
-        default="php,txt,asp",
+        default="php,txt,asp,jsp",
         help="file extensions that should be scanned, comma separated")
     parser.add_option( "-l", "--line", action="store_true",
         dest="line", default=False,
