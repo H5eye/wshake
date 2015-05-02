@@ -25,9 +25,9 @@ def catch_exc(default=None):
 #{{{const
 FLAG_MAP = {
     -1: "normal",
-    1: "low",
-    2: "medium",
-    3: "high"
+    0: "low",
+    1: "medium",
+    2: "high"
 }
 
 Regex = re.compile(r"(?si)(preg_replace.*\/e|`.*?\$.*?`|\bpassthru\b|\bshell_exec\b|\bexec\b|\bbase64_decode\b|\beval\b|\bsystem\b|\bproc_open\b|\bpopen\b|\bcurl_exec\b|\bcurl_multi_exec\b|\bparse_ini_file\b|\bshow_source\b)")
