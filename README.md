@@ -1,8 +1,6 @@
 # wshake
 
-```
 webshell dectector rewrite from [Shell-Detector](https://github.com/emposha/Shell-Detector)
-```
 
 #result template
 ```
