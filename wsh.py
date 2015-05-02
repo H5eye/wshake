@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-import glob
 import base64
 import os
 import os.path as osp
@@ -93,6 +92,7 @@ class Detector(object):
         self.__scan_suffixes = scan_suffixes
         self.__show_line   = show_line
         self.__finger_print = self.load_finter_print(self.__db_path)
+        self.__serial = PhpSerializer()
 
     @catch_exc()
     def get_finger_content(self):
@@ -105,15 +105,15 @@ class Detector(object):
     def list_ext_files(self):
         if self.__scan_path and osp.isfile(self.__scan_path):
             if self.__scan_path.split('.')[-1] not in self.__scan_suffixes:
-                return []
-            return [self.__scan_path]
+                return
+            yield self.__scan_path
 
-        paths = []
         if self.__scan_path and osp.isdir(self.__scan_path):
-            for suffix in self.__scan_suffixes:
-                globs = glob.glob("%s/*.%s"%(self.__scan_path, suffix))
-                globs and paths.extend(globs)
-        return paths
+            for root, _, names in os.walk(self.__scan_path):
+                for name in names:
+                    if not name.endswith(tuple(self.__scan_suffixes)):
+                        continue
+                    yield osp.join(root, name)
 
     @catch_exc(default={})
     def load_finter_print(self):
@@ -125,8 +125,7 @@ class Detector(object):
             return
 
         fingerprints = base64.decodestring(bytes(content))
-        serial = PhpSerializer()
-        fingerprints = serial.unserialize(str(fingerprints))
+        fingerprints = self.__serial.unserialize(str(fingerprints))
 
         results = {}
         for fpt, shell_name in fingerprints.iteritems():
@@ -142,7 +141,7 @@ class Detector(object):
     def get_fileinfo(self, filename):
         mode, _, _, _, uid, gid, size, atime, mtime, ctime = os.stat(filename)
         return {
-            "filename": filename,
+            "filename": osp.abspath(filename),
             "filesize": size,
             "created_time": time.ctime(ctime),
             "last_modified": time.ctime(atime),
@@ -198,7 +197,7 @@ class Detector(object):
                 if not lmatches:
                     continue
                 result["suspicious"].append({"line": count, "func": lmatches})
-                
+
         max_flag = 1
         for reg, shell in self.__finger_print:
             m = reg.findall(content)
