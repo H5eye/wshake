@@ -144,7 +144,7 @@ class Detector(object):
             "filename": osp.abspath(filename),
             "filesize": size,
             "created_time": time.ctime(ctime),
-            "last_modified": time.ctime(atime),
+            "last_accessed": time.ctime(atime),
             "last_modified": time.ctime(mtime),
             "owner": "{0}:{1}".format(uid, gid),
             "perm": oct(mode)[-3:]
